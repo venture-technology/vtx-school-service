@@ -11,6 +11,8 @@ import (
 	controllers "github.com/venture-technology/vtx-school/internal/controller"
 	"github.com/venture-technology/vtx-school/internal/repository"
 	"github.com/venture-technology/vtx-school/internal/service"
+
+	_ "github.com/lib/pq"
 )
 
 func main() {
