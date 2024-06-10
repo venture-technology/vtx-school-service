@@ -9,6 +9,8 @@ import (
 	"github.com/venture-technology/vtx-school/config"
 	"github.com/venture-technology/vtx-school/internal/repository"
 	"github.com/venture-technology/vtx-school/types"
+
+	_ "github.com/lib/pq"
 )
 
 func setupTestDB(t *testing.T) (*sql.DB, *SchoolService) {
@@ -123,6 +125,21 @@ func TestUpdateSchool(t *testing.T) {
 }
 
 func TestAuthSchool(t *testing.T) {
+
+	db, schoolService := setupTestDB(t)
+	defer db.Close()
+
+	schoolMock := mockSchool()
+
+	schoolData, err := schoolService.AuthSchool(context.Background(), schoolMock)
+
+	if err != nil {
+		t.Errorf("Erro ao fazer login da escola: %v", err.Error())
+	}
+
+	if reflect.TypeOf(schoolData) != reflect.TypeOf(schoolMock) {
+		t.Errorf("Não foi retornado os dados de login da escola: %v", err.Error())
+	}
 
 }
 
