@@ -73,12 +73,19 @@ func (ct *SchoolController) RegisterRoutes(router *gin.Engine) {
 
 	api := router.Group("api/v1")
 
+	api.GET("/ping", ct.Ping)                                // pingar rota
 	api.POST("/school", ct.CreateSchool)                     // criar uma escola
 	api.GET("/school/:cnpj", ct.ReadSchool)                  // buscar uma escola em especifico
 	api.GET("/school", ct.ReadAllSchools)                    // buscar todas as escolas
 	api.PATCH("/school", schoolMiddleware, ct.UpdateSchool)  // atualizar algum dado especifico
 	api.DELETE("/school", schoolMiddleware, ct.DeleteSchool) // deletar propria conta
 	api.POST("/login/school", ct.AuthSchool)                 // logar como escola
+}
+
+func (ct *SchoolController) Ping(c *gin.Context) {
+	c.JSON(http.StatusOK, gin.H{
+		"ping": "pong",
+	})
 }
 
 func (ct *SchoolController) CreateSchool(c *gin.Context) {
