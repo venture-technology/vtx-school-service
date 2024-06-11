@@ -142,6 +142,36 @@ func (ct *SchoolController) ReadAllSchools(c *gin.Context) {
 
 func (ct *SchoolController) UpdateSchool(c *gin.Context) {
 
+	cnpjInterface, err := ct.schoolservice.ParserJwtSchool(c)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"message": "cnpj of cookie don't found"})
+		return
+	}
+
+	cnpj, err := utils.InterfaceToString(cnpjInterface)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"message": "the value isn't string"})
+		return
+	}
+
+	var input types.School
+
+	if err := c.BindJSON(&input); err != nil {
+		log.Printf("error to parsed body: %s", err.Error())
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid body content"})
+		return
+	}
+
+	input.CNPJ = *cnpj
+
+	err = ct.schoolservice.UpdateSchool(c, &input)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"message": "internal server error at update"})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{"message": "updated w successfully"})
 
 }
