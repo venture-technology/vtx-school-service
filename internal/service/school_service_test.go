@@ -43,14 +43,14 @@ func newPostgres(dbConfig config.Database) string {
 
 func mockSchool() *types.School {
 	return &types.School{
-		Name:       "",
-		CNPJ:       "",
-		Email:      "",
-		Password:   "",
-		Street:     "",
-		Number:     "",
+		Name:       "EE Professor Armando Gomes de Araujo",
+		CNPJ:       "48480362000153",
+		Email:      "gustavorodrigueslima2004@gmail.com",
+		Password:   "123teste",
+		Street:     "Rua Alfredo ",
+		Number:     "1",
 		Complement: "",
-		ZIP:        "",
+		ZIP:        "08110220",
 	}
 }
 
@@ -118,8 +118,23 @@ func TestGetAllSchools(t *testing.T) {
 
 func TestUpdateSchool(t *testing.T) {
 
-	if reflect.TypeOf(mockSchool()) != reflect.TypeOf(mockSchool()) {
-		t.Error("Erro ao atualizar escola")
+	db, schoolService := setupTestDB(t)
+	defer db.Close()
+
+	newSchool := types.School{
+		Name:       "EE Professor Armando Gomes Araujo",
+		CNPJ:       "48480362000153",
+		Email:      "gustavorodrigueslima2004@gmail.com",
+		Password:   "13867443",
+		Street:     "Rua Alfredo Pariense",
+		Number:     "1",
+		Complement: "",
+		ZIP:        "08110220",
+	}
+
+	err := schoolService.UpdateSchool(context.Background(), &newSchool)
+	if err != nil {
+		t.Errorf("Erro ao atualizar escola: %v", err)
 	}
 
 }
