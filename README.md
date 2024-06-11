@@ -73,7 +73,7 @@ Cria uma conta na API
 **Resposta**
 
 ```json
-}
+{
 "school": {
         "id": 7,
         "name": "E.M.E.F Professor Carlos Pasquale",
