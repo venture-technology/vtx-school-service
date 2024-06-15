@@ -92,6 +92,8 @@ func (ct *SchoolController) CreateSchool(c *gin.Context) {
 
 	var input types.School
 
+	log.Printf("input received to create school -> name: %s, cnpj: %s, email: %s", input.Name, input.CNPJ, input.Email)
+
 	if err := c.BindJSON(&input); err != nil {
 		log.Printf("error to parsed body: %s", err.Error())
 		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid body content"})
@@ -106,6 +108,8 @@ func (ct *SchoolController) CreateSchool(c *gin.Context) {
 		return
 	}
 
+	log.Printf("school created -> name: %s, cnpj: %S, email: %s", input.Name, input.CNPJ, input.Email)
+
 	c.JSON(http.StatusCreated, input)
 
 }
@@ -114,6 +118,8 @@ func (ct *SchoolController) ReadSchool(c *gin.Context) {
 
 	cnpj := c.Param("cnpj")
 
+	log.Printf("param read school -> cnpj: %s", cnpj)
+
 	school, err := ct.schoolservice.ReadSchool(c, &cnpj)
 
 	if err != nil {
@@ -121,6 +127,8 @@ func (ct *SchoolController) ReadSchool(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "school don't found"})
 		return
 	}
+
+	log.Printf("school finded: name: %s, cnpj: %s, email: %s", school.Name, school.CNPJ, school.Email)
 
 	c.JSON(http.StatusOK, gin.H{"school": school})
 
@@ -151,12 +159,16 @@ func (ct *SchoolController) UpdateSchool(c *gin.Context) {
 
 	cnpj, err := utils.InterfaceToString(cnpjInterface)
 
+	log.Printf("trying change your infos --> %v", cnpj)
+
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"message": "the value isn't string"})
 		return
 	}
 
 	var input types.School
+
+	log.Printf("input received to update school -> name: %s, cnpj: %s, email: %s", input.Name, input.CNPJ, input.Email)
 
 	if err := c.BindJSON(&input); err != nil {
 		log.Printf("error to parsed body: %s", err.Error())
@@ -171,6 +183,8 @@ func (ct *SchoolController) UpdateSchool(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"message": "internal server error at update"})
 		return
 	}
+
+	log.Print("infos updated")
 
 	c.JSON(http.StatusOK, gin.H{"message": "updated w successfully"})
 
@@ -187,6 +201,8 @@ func (ct *SchoolController) DeleteSchool(c *gin.Context) {
 
 	cnpj, err := utils.InterfaceToString(cnpjInterface)
 
+	log.Printf("trying delete your infos --> %v", cnpj)
+
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"message": "the value isn't string"})
 		return
@@ -202,6 +218,8 @@ func (ct *SchoolController) DeleteSchool(c *gin.Context) {
 
 	c.SetCookie("token", "", -1, "/", c.Request.Host, false, true)
 
+	log.Printf("deleted your account --> %v", cnpj)
+
 	c.JSON(http.StatusOK, gin.H{"message": "school deleted w successfully"})
 
 }
@@ -209,6 +227,8 @@ func (ct *SchoolController) DeleteSchool(c *gin.Context) {
 func (ct *SchoolController) AuthSchool(c *gin.Context) {
 
 	var input types.School
+
+	log.Printf("%s --> doing login --> %s", input.Email)
 
 	if err := c.BindJSON(&input); err != nil {
 		log.Printf("error to parsed body: %s", err.Error())
@@ -225,6 +245,8 @@ func (ct *SchoolController) AuthSchool(c *gin.Context) {
 	}
 
 	jwt, err := ct.schoolservice.CreateTokenJWTSchool(c, school)
+
+	log.Printf("token returned --> %v", jwt)
 
 	if err != nil {
 		log.Printf("error to create jwt token: %s", err.Error())
