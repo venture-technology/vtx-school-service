@@ -71,7 +71,7 @@ func (ct *SchoolController) RegisterRoutes(router *gin.Engine) {
 
 	}
 
-	api := router.Group("api/v1")
+	api := router.Group("vtx-school/api/v1")
 
 	api.GET("/ping", ct.Ping)                                // pingar rota
 	api.POST("/school", ct.CreateSchool)                     // criar uma escola
