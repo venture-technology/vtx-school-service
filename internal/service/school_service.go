@@ -63,7 +63,7 @@ func (s *SchoolService) UpdateSchool(ctx context.Context, school *types.School) 
 }
 
 func (s *SchoolService) DeleteSchool(ctx context.Context, cnpj *string) error {
-	log.Printf("trying delete your infos --> %v", cnpj)
+	log.Printf("trying delete your infos --> %v", *cnpj)
 	return s.schoolrepository.DeleteSchool(ctx, cnpj)
 }
 
