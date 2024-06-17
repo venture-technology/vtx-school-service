@@ -98,6 +98,11 @@ func (ct *SchoolController) CreateSchool(c *gin.Context) {
 		return
 	}
 
+	validatecnpj := input.ValidateCnpj()
+	if !validatecnpj {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "cnpj is invalid"})
+	}
+
 	err := ct.schoolservice.CreateSchool(c, &input)
 
 	if err != nil {
@@ -169,6 +174,11 @@ func (ct *SchoolController) UpdateSchool(c *gin.Context) {
 	}
 
 	input.CNPJ = *cnpj
+
+	validatecnpj := input.ValidateCnpj()
+	if !validatecnpj {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "cnpj is invalid"})
+	}
 
 	err = ct.schoolservice.UpdateSchool(c, &input)
 	if err != nil {
