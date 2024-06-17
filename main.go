@@ -3,9 +3,10 @@ package main
 import (
 	"database/sql"
 	"fmt"
-	"github.com/segmentio/kafka-go"
 	"log"
 	"os"
+
+	"github.com/segmentio/kafka-go"
 
 	"github.com/gin-gonic/gin"
 	"github.com/venture-technology/vtx-school/config"
