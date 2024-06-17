@@ -3,6 +3,7 @@ package main
 import (
 	"database/sql"
 	"fmt"
+	"github.com/segmentio/kafka-go"
 	"log"
 	"os"
 
@@ -37,9 +38,12 @@ func main() {
 		log.Fatalf("failed to execute migrations: %v", err)
 	}
 
-	schoolRepository := repository.NewSchoolRepository(db)
+	producer := kafka.NewWriter(kafka.WriterConfig{Brokers: []string{config.Messaging.Brokers}, Topic: config.Messaging.Topic, Balancer: &kafka.LeastBytes{}})
 
-	schoolService := service.NewSchoolService(schoolRepository)
+	schoolRepository := repository.NewSchoolRepository(db)
+	kafkaRepository := repository.NewKafkaRepository(producer)
+
+	schoolService := service.NewSchoolService(schoolRepository, kafkaRepository)
 
 	SchoolController := controllers.NewSchoolController(schoolService)
 
