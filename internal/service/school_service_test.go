@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"database/sql"
+	"github.com/segmentio/kafka-go"
 	"reflect"
 	"testing"
 
@@ -26,8 +27,12 @@ func setupTestDB(t *testing.T) (*sql.DB, *SchoolService) {
 		t.Fatalf("falha ao conectar ao banco de dados: %v", err)
 	}
 
+	producer := kafka.NewWriter(kafka.WriterConfig{Brokers: []string{config.Messaging.Brokers}, Topic: config.Messaging.Topic, Balancer: &kafka.LeastBytes{}})
+
 	schoolRepository := repository.NewSchoolRepository(db)
-	schoolService := NewSchoolService(schoolRepository)
+	kafkaRepository := repository.NewKafkaRepository(producer)
+
+	schoolService := NewSchoolService(schoolRepository, kafkaRepository)
 
 	return db, schoolService
 }
