@@ -24,14 +24,32 @@ func NewSchoolService(repo repository.SchoolRepositoryInterface, producer reposi
 }
 
 func (s *SchoolService) CreateSchool(ctx context.Context, school *types.School) error {
+
 	log.Printf("input received to create school -> name: %s, cnpj: %s, email: %s", school.Name, school.CNPJ, school.Email)
+
 	school.Password = utils.HashPassword(school.Password)
+
+	email := types.Email{
+		Recipient: school.Email,
+		Subject:   fmt.Sprintf("Verification Email - %s", school.Name),
+		Body:      fmt.Sprintf("Greetings %s, thank you very much for choosing us, we will be with you today, tomorrow and always. Venture, fast and safe.", school.Name),
+	}
+
+	msg, err := email.EmailStructToJson()
+	if err != nil {
+		return err
+	}
+
+	err = s.kafkarepository.PublishKafkaMessage(ctx, msg)
+	if err != nil {
+		return err
+	}
 
 	return s.schoolrepository.CreateSchool(ctx, school)
 }
 
 func (s *SchoolService) ReadSchool(ctx context.Context, cnpj *string) (*types.School, error) {
-	log.Printf("param read school -> cnpj: %s", cnpj)
+	log.Printf("param read school -> cnpj: %s", *cnpj)
 	return s.schoolrepository.ReadSchool(ctx, cnpj)
 }
 
