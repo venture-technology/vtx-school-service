@@ -16,15 +16,17 @@ import (
 
 type SchoolService struct {
 	schoolrepository repository.SchoolRepositoryInterface
+	kafkarepository  repository.IKafkaRepository
 }
 
-func NewSchoolService(repo repository.SchoolRepositoryInterface) *SchoolService {
-	return &SchoolService{schoolrepository: repo}
+func NewSchoolService(repo repository.SchoolRepositoryInterface, producer repository.IKafkaRepository) *SchoolService {
+	return &SchoolService{schoolrepository: repo, kafkarepository: producer}
 }
 
 func (s *SchoolService) CreateSchool(ctx context.Context, school *types.School) error {
 	log.Printf("input received to create school -> name: %s, cnpj: %s, email: %s", school.Name, school.CNPJ, school.Email)
 	school.Password = utils.HashPassword(school.Password)
+
 	return s.schoolrepository.CreateSchool(ctx, school)
 }
 
