@@ -228,7 +228,7 @@ func (ct *SchoolController) AuthSchool(c *gin.Context) {
 
 	var input types.School
 
-	log.Printf("%s --> doing login --> %s", input.Email)
+	log.Printf("doing login --> %s", input.Email)
 
 	if err := c.BindJSON(&input); err != nil {
 		log.Printf("error to parsed body: %s", err.Error())
