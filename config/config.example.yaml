@@ -1,0 +1,30 @@
+name: venture
+development: true
+
+server-school:
+  host-vtx-school: "localhost"
+  port-vtx-school: 8888
+  secret-vtx-school: "venture"
+
+database:
+  dbuser: "postgres"
+  dbport: 5432
+  dbhost: "ipdb"
+  dbpassword: "password"
+  dbname: "namedb"
+  schema: "database/schema.sql"
+
+cloud:
+  region: "us-east-1"
+  accesskey: "secretkey"
+  secretkey: "accesskey"
+  token: ""
+  source: "emailsource"
+
+cache:
+  address: "addressredis"
+  password: "passwordredis"
+
+messaging:
+  broker: "brokerip"
+  topic: "email.send.topic"
