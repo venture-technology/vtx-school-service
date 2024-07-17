@@ -13,7 +13,7 @@ jobs:
       contents: read
 
     env:
-      IMAGE_NAME: ghcr.io/venture-technology/vtx-school
+      IMAGE_NAME: ghcr.io/venture-technology/vtx-school-service
 
     steps:
       - name: Checkout code
