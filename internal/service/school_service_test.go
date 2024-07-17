@@ -3,9 +3,10 @@ package service
 import (
 	"context"
 	"database/sql"
-	"github.com/segmentio/kafka-go"
 	"reflect"
 	"testing"
+
+	"github.com/segmentio/kafka-go"
 
 	"github.com/venture-technology/vtx-school/config"
 	"github.com/venture-technology/vtx-school/internal/repository"
@@ -51,7 +52,7 @@ func mockSchool() *types.School {
 		Name:       "EE Professor Armando Gomes de Araujo",
 		CNPJ:       "48480362000153",
 		Email:      "gustavorodrigueslima2004@gmail.com",
-		Password:   "123teste",
+		Password:   "13867443",
 		Street:     "Rua Alfredo ",
 		Number:     "1",
 		Complement: "",
